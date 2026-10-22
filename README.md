@@ -85,6 +85,17 @@ npm run build
 node dist/cli.js --help
 ```
 
+### Release
+
+Releases are published to npm by GitHub Actions ([release.yml](.github/workflows/release.yml)) using npm trusted publishing, so no npm token is stored anywhere.
+
+```sh
+npm version minor          # or patch / major / prerelease --preid beta; commits and tags vX.Y.Z
+git push --follow-tags
+```
+
+Then approve the run in the `npm-release` environment on GitHub. Pre-release versions (with a `-`) are published under the `next` tag.
+
 ## License
 
 MIT

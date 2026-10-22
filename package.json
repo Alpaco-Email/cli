@@ -10,6 +10,9 @@
   "exports": {
     ".": "./dist/core/index.js"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "dist"
   ],
