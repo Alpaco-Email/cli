@@ -147,3 +147,7 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+
+# Internal platform docs (not for the public repo)
+docs/internal/
