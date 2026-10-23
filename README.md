@@ -33,8 +33,8 @@ The CLI talks to `platform.alpaco.email`. `ALPACO_HOST` (or `--host`) points it 
 
 ```sh
 alpaco list                  # templates you can open, with their ids
-alpaco pull 221              # download one into a folder
-cd new-template-test
+alpaco pull [template ID]              # download one into a folder
+cd [template name]
 # …edit the files…
 alpaco validate              # check it before pushing
 alpaco diff                  # what pushing would change against the live template
