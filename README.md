@@ -13,6 +13,8 @@ npx @alpaco-email/cli --help          # run without installing
 npm install -g @alpaco-email/cli      # or install the `alpaco` command
 ```
 
+The examples below use `alpaco`. With npx, write `npx @alpaco-email/cli` instead, e.g. `npx @alpaco-email/cli login`.
+
 ## Log in
 
 In Alpaco, open your profile page, go to **Personal access token** and click **Generate Token**. Then run:

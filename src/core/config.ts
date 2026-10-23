@@ -10,6 +10,7 @@ import { chmod, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { DEFAULT_HOST, normaliseHost } from './client.ts';
+import { run } from './hint.ts';
 
 interface Credentials {
   default?: string;
@@ -72,7 +73,7 @@ export async function resolveAuth(opts: { host?: string; projectHost?: string } 
   const host = normaliseHost(opts.host || process.env.ALPACO_HOST || opts.projectHost || creds.default || DEFAULT_HOST);
   const token = process.env.ALPACO_TOKEN || creds.hosts[host]?.token;
   if (!token) {
-    throw new NotLoggedIn(`Not logged in to ${host}. Run \`alpaco login\`, or set ALPACO_TOKEN.`);
+    throw new NotLoggedIn(`Not logged in to ${host}. Run \`${run('login')}\`, or set ALPACO_TOKEN.`);
   }
   return { host, token };
 }

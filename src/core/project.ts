@@ -15,6 +15,7 @@ import { existsSync } from 'node:fs';
 import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { DEFAULT_HOST, normaliseHost, type AlpacoClient, type PendingSummary } from './client.ts';
+import { run } from './hint.ts';
 import { GLOBAL_VARS_FILE, TEMPLATE_FILE, designToFiles, filesToDesign, type Layout } from './files.ts';
 import type { Design } from './types.ts';
 
@@ -49,7 +50,7 @@ export class Project {
     const root = resolve(dir);
     const file = join(root, PROJECT_FILE);
     if (!existsSync(file)) {
-      throw new ProjectError(`No ${PROJECT_FILE} in ${root}. Run \`alpaco pull <template id>\` first, or pass the folder.`);
+      throw new ProjectError(`No ${PROJECT_FILE} in ${root}. Run \`${run('pull <template id>')}\` first, or pass the folder.`);
     }
     let info: ProjectInfo;
     try {

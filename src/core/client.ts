@@ -5,6 +5,7 @@
  * someone publishes in Alpaco. There is no publish call, by design.
  */
 
+import { run } from './hint.ts';
 import type { Design, Json } from './types.ts';
 
 export const DEFAULT_HOST = 'https://platform.alpaco.email';
@@ -183,7 +184,7 @@ function errorMessage(status: number, body: Record<string, unknown>, host: strin
     : typeof body.error_description === 'string' ? body.error_description : '';
   switch (status) {
     case 401:
-      return `Alpaco refused the token. Generate a new one on your Alpaco profile page (Personal access token) and run \`alpaco login\`.`;
+      return `Alpaco refused the token. Generate a new one on your Alpaco profile page (Personal access token) and run \`${run('login')}\`.`;
     case 403:
       return said || 'You do not have permission to do that.';
     case 404:

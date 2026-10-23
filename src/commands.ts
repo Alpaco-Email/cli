@@ -9,6 +9,7 @@ import { AlpacoClient, ApiError, DEFAULT_HOST, normaliseHost, type PendingChange
 import { defaultHost, removeToken, resolveAuth, saveToken, NotLoggedIn } from './core/config.ts';
 import { sameJson } from './core/order.ts';
 import { Project, ProjectError, hashDesign } from './core/project.ts';
+import { run } from './core/hint.ts';
 import { validateDesign, type Problem } from './core/validate.ts';
 import { askSecret, bold, confirm, cyan, dim, green, printProblems, red, say, warn, yellow } from './ui.ts';
 
@@ -121,7 +122,7 @@ export async function pull(idArg: string, dirArg: string | undefined, opts: Glob
       }
     }
   } else if (existsSync(dir) && readdirSync(dir).length > 0) {
-    throw new ProjectError(`${dir} already exists and is not empty. Choose another folder: alpaco pull ${id} <folder>`);
+    throw new ProjectError(`${dir} already exists and is not empty. Choose another folder: ${run(`pull ${id} <folder>`)}`);
   }
 
   project ??= new Project(resolve(dir), { template: id, name: template.name, version: template.version });
@@ -135,9 +136,9 @@ export async function pull(idArg: string, dirArg: string | undefined, opts: Glob
   }
 
   say(green(`Pulled "${template.name}" (version ${template.version}) into ${dir}`));
-  say(dim(`  ${template.design.blocks?.length ?? 0} blocks · edit the files, then: alpaco validate, alpaco diff, alpaco push`));
+  say(dim(`  ${template.design.blocks?.length ?? 0} blocks · edit the files, then: ${run('validate')}, ${run('diff')}, ${run('push')}`));
   if (!template.permissions.write) warn('You can read this template but not edit it, so you will not be able to push.');
-  if (template.pending.length) say(yellow(`  ${template.pending.length} pending change(s) waiting for review. See: alpaco status`));
+  if (template.pending.length) say(yellow(`  ${template.pending.length} pending change(s) waiting for review. See: ${run('status')}`));
 }
 
 export async function validate(dir: string, opts: Global & { json?: boolean }) {
@@ -183,7 +184,7 @@ export async function push(dir: string, opts: Global & { yes?: boolean }) {
   const problems = validateDesign(design, layout);
   if (problems.length) {
     printProblems(problems);
-    throw new ProjectError('Not pushed: fix the errors above first (alpaco validate).');
+    throw new ProjectError(`Not pushed: fix the errors above first (${run('validate')}).`);
   }
   if (sameJson(design, base)) {
     say(`Nothing to push: the files match version ${project.info.version}.`);
@@ -208,13 +209,13 @@ export async function push(dir: string, opts: Global & { yes?: boolean }) {
     }, design);
     say(green(`Pending review (#${result.pending_id}). Nothing is live until someone publishes it in Alpaco.`));
     say(`  Review: ${cyan(result.review_url)}`);
-    say(dim('  Check on it with: alpaco status'));
+    say(dim(`  Check on it with: ${run('status')}`));
   } catch (err) {
     if (err instanceof ApiError && err.status === 409) {
       const now = err.body.current_version;
       throw new ProjectError(
         `Not pushed: the template was saved in Alpaco after you pulled version ${version}${now ? ` (it is now version ${now})` : ''}.\n` +
-        'Keep a copy of your changes, run `alpaco pull --force`, re-apply them and push again.',
+        `Keep a copy of your changes, run \`${run('pull --force')}\`, re-apply them and push again.`,
       );
     }
     if (err instanceof ApiError && err.status === 403) {
@@ -324,7 +325,7 @@ function statusLabel(s: string) {
 
 function templateId(arg: string): number {
   const id = Number(arg);
-  if (!Number.isInteger(id) || id <= 0) throw new ProjectError(`"${arg}" is not a template id. Find ids with: alpaco list`);
+  if (!Number.isInteger(id) || id <= 0) throw new ProjectError(`"${arg}" is not a template id. Find ids with: ${run('list')}`);
   return id;
 }
 

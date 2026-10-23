@@ -11,6 +11,7 @@ import * as commands from './commands.ts';
 import { ApiError } from './core/client.ts';
 import { NotLoggedIn } from './core/config.ts';
 import { LayoutError } from './core/files.ts';
+import { run as hint } from './core/hint.ts';
 import { ProjectError } from './core/project.ts';
 import { red } from './ui.ts';
 
@@ -62,7 +63,7 @@ program.command('list')
 
 program.command('pull')
   .description('Download a template into a folder (or update a pulled folder)')
-  .argument('<id>', 'template id (see alpaco list)')
+  .argument('<id>', `template id (see ${hint('list')})`)
   .argument('[folder]', 'where to put it (default: named after the template)')
   .option('--force', 'overwrite changes in the folder that have not been pushed')
   .action(run((id, folder, o) => commands.pull(id, folder, { ...g(), ...o })));
@@ -93,7 +94,7 @@ program.command('status')
 
 program.command('withdraw')
   .description('Take back a pending change you pushed')
-  .argument('<pendingId>', 'the pending change (see alpaco status)')
+  .argument('<pendingId>', `the pending change (see ${hint('status')})`)
   .argument('[folder]', 'pulled folder', '.')
   .action(run((pendingId, folder) => commands.withdraw(pendingId, folder, g())));
 

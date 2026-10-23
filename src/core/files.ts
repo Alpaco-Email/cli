@@ -13,6 +13,7 @@
  * one change nothing.
  */
 
+import { run } from './hint.ts';
 import { orderLike } from './order.ts';
 import type { Design, Json, JsonObject, Unit } from './types.ts';
 
@@ -80,7 +81,7 @@ export class LayoutError extends Error {}
  */
 export function filesToDesign(read: (path: string) => string | undefined, reference?: Design): { design: Design; layout: Layout } {
   const rootText = read(TEMPLATE_FILE);
-  if (rootText === undefined) throw new LayoutError(`${TEMPLATE_FILE} is missing. Is this a folder made by \`alpaco pull\`?`);
+  if (rootText === undefined) throw new LayoutError(`${TEMPLATE_FILE} is missing. Is this a folder made by \`${run('pull')}\`?`);
   const root = parseJson(rootText, TEMPLATE_FILE);
   if (!isObject(root)) throw new LayoutError(`${TEMPLATE_FILE} must hold a JSON object.`);
 
