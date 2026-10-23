@@ -73,7 +73,7 @@ It also **warns** when a block, input group or input key has been removed or ren
 
 ### When a push is refused
 
-- **Template saved since you pulled.** Someone saved it in Alpaco after your pull. Keep a copy of your changes, run `alpaco pull --force`, re-apply them and push again.
+- **Template saved since you pulled.** Someone saved it in Alpaco after your pull. Keep a copy of your changes, run `alpaco pull [template ID] --force` from the template folder, re-apply them and push again.
 - **Change outdated.** `alpaco status` shows a change as `outdated` when the template changed after you pushed it. Do the same: pull, re-apply, push.
 
 There is no `publish` command or `--force` push. Publishing only happens in Alpaco.

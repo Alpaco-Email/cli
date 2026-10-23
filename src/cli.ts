@@ -64,7 +64,7 @@ program.command('list')
 program.command('pull')
   .description('Download a template into a folder (or update a pulled folder)')
   .argument('<id>', `template id (see ${hint('list')})`)
-  .argument('[folder]', 'where to put it (default: named after the template)')
+  .argument('[folder]', 'where to put it (default: this folder if it holds the template, otherwise one named after it)')
   .option('--force', 'overwrite changes in the folder that have not been pushed')
   .action(run((id, folder, o) => commands.pull(id, folder, { ...g(), ...o })));
 

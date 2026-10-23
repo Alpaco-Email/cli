@@ -105,6 +105,13 @@ export async function pull(idArg: string, dirArg: string | undefined, opts: Glob
     if (project.info.template !== id) {
       throw new ProjectError(`${dir} holds template ${project.info.template}, not ${id}.`);
     }
+  } else if (!dir && Project.exists('.')) {
+    // Pulling from inside a pulled copy of this template updates it rather than nesting another copy.
+    const here = await Project.load('.');
+    if (here.info.template === id) {
+      project = here;
+      dir = '.';
+    }
   }
 
   const client = await clientFor(opts, project?.info.host);
